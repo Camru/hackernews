@@ -1,26 +1,21 @@
-import { formatTimeAgo } from '../utils/time'
-import { getHostname } from '../utils/url'
-import type { Story } from '../types'
+import {formatTimeAgo} from '../utils/time';
+import {getHostname} from '../utils/url';
+import type {Story} from '../types';
 
 interface StoryItemProps {
-  story: Story
-  rank: number
+  story: Story;
+  rank: number;
 }
 
-export function StoryItem({ story, rank }: StoryItemProps) {
-  const hostname = getHostname(story.url)
-  const commentsUrl = `https://news.ycombinator.com/item?id=${story.id}`
+export function StoryItem({story, rank}: StoryItemProps) {
+  const hostname = getHostname(story.url);
+  const commentsUrl = `https://news.ycombinator.com/item?id=${story.id}`;
 
   return (
     <li className="story-item">
       <span className="story-rank">{rank}</span>
       <div className="story-content">
-        <a
-          className="story-title"
-          href={story.url ?? commentsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a className="story-title" href={story.url ?? commentsUrl}>
           {story.title}
         </a>
         {hostname && <span className="story-host">({hostname})</span>}
@@ -34,5 +29,5 @@ export function StoryItem({ story, rank }: StoryItemProps) {
         </div>
       </div>
     </li>
-  )
+  );
 }
