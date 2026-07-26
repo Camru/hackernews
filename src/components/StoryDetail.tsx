@@ -22,7 +22,7 @@ export function StoryDetail({id, searchQuery}: StoryDetailProps) {
       )}
       {story && (
         <>
-          <div className="story-detail-header">
+          <div id="story-detail-header" className="story-detail-header">
             <a
               className="story-title"
               href={story.url ?? commentsUrl}

@@ -7,7 +7,11 @@ import {useTopStoryIds} from './hooks/useTopStoryIds';
 const TOP_STORIES_LIMIT = 30;
 
 function App() {
-  const {data: storyIds = [], isPending, isError} = useTopStoryIds(TOP_STORIES_LIMIT);
+  const {
+    data: storyIds = [],
+    isPending,
+    isError,
+  } = useTopStoryIds(TOP_STORIES_LIMIT);
   const {storyId, closeStory} = useHashRoute();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,7 +25,17 @@ function App() {
   }, [storyId]);
 
   function scrollToTopOfComments() {
-    document.getElementById('comment-list')?.scrollIntoView({behavior: 'smooth', block: 'start'});
+    const target = document.getElementById('story-detail-header');
+    if (!target) {
+      return;
+    }
+    // The header is sticky, so scrollIntoView's default alignment leaves the
+    // top of the target tucked underneath it. Measuring the header's actual
+    // rendered height (it varies by breakpoint) and subtracting that from the
+    // scroll offset keeps the title fully visible below the sticky header.
+    const headerHeight = document.querySelector('.header')?.getBoundingClientRect().height ?? 0;
+    const targetTop = target.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({top: targetTop - headerHeight, behavior: 'smooth'});
   }
 
   function closeSearch() {
@@ -35,10 +49,16 @@ function App() {
         <div className="header-primary">
           {storyId ? (
             <div className="header-actions">
-              <button type="button" className="back-button" onClick={closeStory}>
+              <button
+                type="button"
+                className="back-button"
+                onClick={closeStory}>
                 ← Back
               </button>
-              <button type="button" className="back-button" onClick={scrollToTopOfComments}>
+              <button
+                type="button"
+                className="back-button"
+                onClick={scrollToTopOfComments}>
                 ↑ Top
               </button>
             </div>
@@ -63,8 +83,7 @@ function App() {
                 type="button"
                 className="search-close"
                 onClick={closeSearch}
-                aria-label="Close search"
-              >
+                aria-label="Close search">
                 ×
               </button>
             </div>
@@ -73,8 +92,7 @@ function App() {
               type="button"
               className="search-toggle"
               onClick={() => setIsSearchOpen(true)}
-              aria-label="Search"
-            >
+              aria-label="Search">
               <svg
                 width="18"
                 height="18"
@@ -84,8 +102,7 @@ function App() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                aria-hidden="true"
-              >
+                aria-hidden="true">
                 <circle cx="11" cy="11" r="7" />
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
@@ -100,7 +117,9 @@ function App() {
           <>
             {isPending && <p className="status">Loading stories…</p>}
             {isError && (
-              <p className="status status-error">Failed to load stories. Please try again.</p>
+              <p className="status status-error">
+                Failed to load stories. Please try again.
+              </p>
             )}
             {!isPending && !isError && (
               <StoryList storyIds={storyIds} searchQuery={searchQuery} />

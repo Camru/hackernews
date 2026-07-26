@@ -1,3 +1,4 @@
+import type {KeyboardEvent, MouseEvent} from 'react';
 import {useStory} from '../hooks/useStory';
 import {formatTimeAgo} from '../utils/time';
 import {getHostname} from '../utils/url';
@@ -34,10 +35,32 @@ export function StoryItem({id, rank}: StoryItemProps) {
   }
 
   const hostname = getHostname(story.url);
-  const commentsUrl = `https://news.ycombinator.com/item?id=${story.id}`;
+  const storyId = story.id;
+  const commentsUrl = `https://news.ycombinator.com/item?id=${storyId}`;
+
+  function openComments() {
+    window.location.hash = `story/${storyId}`;
+  }
+
+  function handleKeyDown(event: KeyboardEvent<HTMLLIElement>) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openComments();
+    }
+  }
+
+  function stopPropagation(event: MouseEvent) {
+    event.stopPropagation();
+  }
 
   return (
-    <li className="story-item">
+    <li
+      className="story-item story-item--clickable"
+      onClick={openComments}
+      onKeyDown={handleKeyDown}
+      role="link"
+      tabIndex={0}
+    >
       <span className="story-rank">{rank}</span>
       <div className="story-content">
         <a
@@ -45,6 +68,7 @@ export function StoryItem({id, rank}: StoryItemProps) {
           href={story.url ?? commentsUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={stopPropagation}
         >
           {story.title}
         </a>
@@ -53,7 +77,7 @@ export function StoryItem({id, rank}: StoryItemProps) {
           <span>{story.score} points</span>
           <span>by {story.by}</span>
           <span>{formatTimeAgo(story.time)}</span>
-          <a className="story-comments" href={`#story/${story.id}`}>
+          <a className="story-comments" href={`#story/${storyId}`} onClick={stopPropagation}>
             {story.descendants ?? 0} comments
           </a>
         </div>

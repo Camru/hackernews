@@ -123,6 +123,15 @@ code {
   -webkit-tap-highlight-color: transparent;
 }
 
+.story-item--clickable {
+  cursor: pointer;
+}
+
+.story-item--clickable:focus-visible {
+  outline: 2px solid var(--color-clay);
+  outline-offset: -2px;
+}
+
 .story-rank {
   flex-shrink: 0;
   min-width: 0.5em;
@@ -327,7 +336,6 @@ code {
 
 .comment-list {
   padding: var(--space-2) var(--space-4) var(--space-5);
-  scroll-margin-top: var(--space-7);
 }
 
 .comment {
