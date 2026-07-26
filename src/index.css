@@ -5,7 +5,6 @@
   --color-sky: #6a8caf;
   --color-oat: #f0eee6;
   --color-slate: #141413;
-  /* g500/g300 hex values weren't labeled in the token sheet; approximated to match the warm-neutral palette */
   --color-gray-900: #4f4f4f;
   --color-gray-500: #8a8a83;
   --color-gray-300: #d6d2c4;
@@ -48,6 +47,10 @@ a {
   text-decoration: none;
 }
 
+code {
+  white-space: normal;
+}
+
 .app {
   max-width: 700px;
   margin: 0 auto;
@@ -62,6 +65,9 @@ a {
   gap: var(--space-2);
   background: var(--color-oat);
   padding: var(--space-2);
+}
+
+.header--sticky {
   position: sticky;
   top: 0;
   z-index: 1;

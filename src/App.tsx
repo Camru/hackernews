@@ -6,7 +6,7 @@ import {useTopStories} from './hooks/useTopStories';
 const TOP_STORIES_LIMIT = 30;
 
 function App() {
-  const {stories, isLoading, error} = useTopStories(TOP_STORIES_LIMIT);
+  const {data: stories = [], isPending, isError} = useTopStories(TOP_STORIES_LIMIT);
   const {storyId, closeStory} = useHashRoute();
 
   function scrollToTopOfComments() {
@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className="app">
-      <header className="header">
+      <header className={`header${storyId ? ' header--sticky' : ''}`}>
         {storyId ? (
           <div className="header-actions">
             <button type="button" className="back-button" onClick={closeStory}>
@@ -36,9 +36,11 @@ function App() {
           <StoryDetail id={storyId} />
         ) : (
           <>
-            {isLoading && <p className="status">Loading stories…</p>}
-            {error && <p className="status status-error">{error}</p>}
-            {!isLoading && !error && <StoryList stories={stories} />}
+            {isPending && <p className="status">Loading stories…</p>}
+            {isError && (
+              <p className="status status-error">Failed to load stories. Please try again.</p>
+            )}
+            {!isPending && !isError && <StoryList stories={stories} />}
           </>
         )}
       </main>

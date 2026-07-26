@@ -1,8 +1,7 @@
-import { useEffect, useState, type KeyboardEvent, type MouseEvent } from 'react'
-import { fetchComment } from '../api/hackerNews'
+import { useState, type KeyboardEvent, type MouseEvent } from 'react'
+import { useComment } from '../hooks/useComment'
 import { formatTimeAgo } from '../utils/time'
 import { sanitizeCommentHtml } from '../utils/sanitizeHtml'
-import type { Comment } from '../types'
 
 // Replies past this depth start collapsed so opening a large thread doesn't
 // fan out into hundreds of simultaneous item fetches.
@@ -14,30 +13,10 @@ interface CommentItemProps {
 }
 
 export function CommentItem({ id, depth = 0 }: CommentItemProps) {
-  const [comment, setComment] = useState<Comment | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: comment, isPending } = useComment(id)
   const [repliesExpanded, setRepliesExpanded] = useState(depth < AUTO_EXPAND_DEPTH)
 
-  useEffect(() => {
-    let isCancelled = false
-
-    fetchComment(id)
-      .then((result) => {
-        if (!isCancelled) setComment(result)
-      })
-      .catch(() => {
-        if (!isCancelled) setComment(null)
-      })
-      .finally(() => {
-        if (!isCancelled) setIsLoading(false)
-      })
-
-    return () => {
-      isCancelled = true
-    }
-  }, [id])
-
-  if (isLoading) {
+  if (isPending) {
     return (
       <li className="comment">
         <p className="comment-placeholder">Loading…</p>

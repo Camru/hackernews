@@ -1,52 +1,33 @@
-import {useEffect, useState} from 'react';
-import {fetchStory} from '../api/hackerNews';
+import {useStory} from '../hooks/useStory';
 import {CommentItem} from './CommentItem';
 import {formatTimeAgo} from '../utils/time';
 import {getHostname} from '../utils/url';
-import type {Story} from '../types';
 
 interface StoryDetailProps {
   id: number;
 }
 
 export function StoryDetail({id}: StoryDetailProps) {
-  const [story, setStory] = useState<Story | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let isCancelled = false;
-    setIsLoading(true);
-    setError(null);
-
-    fetchStory(id)
-      .then((result) => {
-        if (!isCancelled) setStory(result);
-      })
-      .catch(() => {
-        if (!isCancelled)
-          setError('Failed to load this story. Please try again.');
-      })
-      .finally(() => {
-        if (!isCancelled) setIsLoading(false);
-      });
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [id]);
+  const {data: story, isPending, isError} = useStory(id);
 
   const hostname = story ? getHostname(story.url) : null;
   const commentsUrl = `https://news.ycombinator.com/item?id=${id}`;
 
   return (
     <div className="story-detail">
-      {isLoading && <p className="status">Loading story…</p>}
-      {error && <p className="status status-error">{error}</p>}
+      {isPending && <p className="status">Loading story…</p>}
+      {isError && (
+        <p className="status status-error">Failed to load this story. Please try again.</p>
+      )}
       {story && (
         <>
           <div className="story-detail-header">
-            <a className="story-title" href={story.url ?? commentsUrl}>
+            <a
+              className="story-title"
+              href={story.url ?? commentsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {story.title}
             </a>
             {hostname && <span className="story-host">({hostname})</span>}
