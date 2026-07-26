@@ -1,3 +1,4 @@
+import {useEffect, useState} from 'react';
 import {StoryDetail} from './components/StoryDetail';
 import {StoryList} from './components/StoryList';
 import {useHashRoute} from './hooks/useHashRoute';
@@ -8,39 +9,102 @@ const TOP_STORIES_LIMIT = 30;
 function App() {
   const {data: storyIds = [], isPending, isError} = useTopStoryIds(TOP_STORIES_LIMIT);
   const {storyId, closeStory} = useHashRoute();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Story-title search and comment search are different contexts, so clear
+  // out any in-progress search whenever navigating between the list and a
+  // story's comments (or between two different stories).
+  useEffect(() => {
+    setIsSearchOpen(false);
+    setSearchQuery('');
+  }, [storyId]);
 
   function scrollToTopOfComments() {
     document.getElementById('comment-list')?.scrollIntoView({behavior: 'smooth', block: 'start'});
   }
 
+  function closeSearch() {
+    setIsSearchOpen(false);
+    setSearchQuery('');
+  }
+
   return (
     <div className="app">
       <header className={`header${storyId ? ' header--sticky' : ''}`}>
-        {storyId ? (
-          <div className="header-actions">
-            <button type="button" className="back-button" onClick={closeStory}>
-              ← Back
+        <div className="header-primary">
+          {storyId ? (
+            <div className="header-actions">
+              <button type="button" className="back-button" onClick={closeStory}>
+                ← Back
+              </button>
+              <button type="button" className="back-button" onClick={scrollToTopOfComments}>
+                ↑ Top
+              </button>
+            </div>
+          ) : (
+            <a className="header-title" href="/">
+              <h1>Hacker News</h1>
+            </a>
+          )}
+        </div>
+        <div className="header-search">
+          {isSearchOpen ? (
+            <div className="search-box">
+              <input
+                type="search"
+                className="search-input"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder={storyId ? 'Search comments' : 'Search titles'}
+                autoFocus
+              />
+              <button
+                type="button"
+                className="search-close"
+                onClick={closeSearch}
+                aria-label="Close search"
+              >
+                ×
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="search-toggle"
+              onClick={() => setIsSearchOpen(true)}
+              aria-label="Search"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
             </button>
-            <button type="button" className="back-button" onClick={scrollToTopOfComments}>
-              ↑ Top
-            </button>
-          </div>
-        ) : (
-          <a className="header-title" href="/">
-            <h1>Hacker News</h1>
-          </a>
-        )}
+          )}
+        </div>
       </header>
       <main>
         {storyId ? (
-          <StoryDetail id={storyId} />
+          <StoryDetail id={storyId} searchQuery={searchQuery} />
         ) : (
           <>
             {isPending && <p className="status">Loading stories…</p>}
             {isError && (
               <p className="status status-error">Failed to load stories. Please try again.</p>
             )}
-            {!isPending && !isError && <StoryList storyIds={storyIds} />}
+            {!isPending && !isError && (
+              <StoryList storyIds={storyIds} searchQuery={searchQuery} />
+            )}
           </>
         )}
       </main>

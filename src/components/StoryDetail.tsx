@@ -5,9 +5,10 @@ import {getHostname} from '../utils/url';
 
 interface StoryDetailProps {
   id: number;
+  searchQuery: string;
 }
 
-export function StoryDetail({id}: StoryDetailProps) {
+export function StoryDetail({id, searchQuery}: StoryDetailProps) {
   const {data: story, isPending, isError} = useStory(id);
 
   const hostname = story ? getHostname(story.url) : null;
@@ -42,7 +43,9 @@ export function StoryDetail({id}: StoryDetailProps) {
           </div>
           <ul id="comment-list" className="comment-list">
             {story.kids && story.kids.length > 0 ? (
-              story.kids.map((kidId) => <CommentItem key={kidId} id={kidId} />)
+              story.kids.map((kidId) => (
+                <CommentItem key={kidId} id={kidId} searchQuery={searchQuery} />
+              ))
             ) : (
               <li className="status">No comments yet.</li>
             )}
