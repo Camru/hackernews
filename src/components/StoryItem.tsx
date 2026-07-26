@@ -1,13 +1,38 @@
+import {useStory} from '../hooks/useStory';
 import {formatTimeAgo} from '../utils/time';
 import {getHostname} from '../utils/url';
-import type {Story} from '../types';
 
 interface StoryItemProps {
-  story: Story;
+  id: number;
   rank: number;
 }
 
-export function StoryItem({story, rank}: StoryItemProps) {
+export function StoryItem({id, rank}: StoryItemProps) {
+  const {data: story, isPending, isError} = useStory(id);
+
+  if (isPending) {
+    return (
+      <li className="story-item">
+        <span className="story-rank">{rank}</span>
+        <div className="story-content">
+          <div className="skeleton skeleton-title" />
+          <div className="skeleton skeleton-meta" />
+        </div>
+      </li>
+    );
+  }
+
+  if (isError || !story) {
+    return (
+      <li className="story-item">
+        <span className="story-rank">{rank}</span>
+        <div className="story-content">
+          <p className="status-error">Failed to load this story.</p>
+        </div>
+      </li>
+    );
+  }
+
   const hostname = getHostname(story.url);
   const commentsUrl = `https://news.ycombinator.com/item?id=${story.id}`;
 
@@ -15,7 +40,12 @@ export function StoryItem({story, rank}: StoryItemProps) {
     <li className="story-item">
       <span className="story-rank">{rank}</span>
       <div className="story-content">
-        <a className="story-title" href={story.url ?? commentsUrl}>
+        <a
+          className="story-title"
+          href={story.url ?? commentsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {story.title}
         </a>
         {hostname && <span className="story-host">({hostname})</span>}

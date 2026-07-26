@@ -1,15 +1,14 @@
 import { StoryItem } from './StoryItem'
-import type { Story } from '../types'
 
 interface StoryListProps {
-  stories: Story[]
+  storyIds: number[]
 }
 
-export function StoryList({ stories }: StoryListProps) {
+export function StoryList({ storyIds }: StoryListProps) {
   return (
     <ol className="story-list">
-      {stories.map((story, index) => (
-        <StoryItem key={story.id} story={story} rank={index + 1} />
+      {storyIds.map((id, index) => (
+        <StoryItem key={id} id={id} rank={index + 1} />
       ))}
     </ol>
   )

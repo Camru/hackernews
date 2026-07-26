@@ -25,9 +25,3 @@ export function fetchStory(id: number): Promise<Story> {
 export function fetchComment(id: number): Promise<Comment> {
   return fetchItem<Comment>(id)
 }
-
-export async function fetchTopStories(limit: number): Promise<Story[]> {
-  const ids = await fetchTopStoryIds()
-  const stories = await Promise.all(ids.slice(0, limit).map(fetchStory))
-  return stories
-}
