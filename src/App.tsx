@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import y18 from './assets/y18.svg';
 import {StoryDetail} from './components/StoryDetail';
 import {StoryList} from './components/StoryList';
 import {useHashRoute} from './hooks/useHashRoute';
@@ -64,6 +65,7 @@ function App() {
             </div>
           ) : (
             <a className="header-title" href="/">
+              <img className="header-logo" src={y18} alt="" width="18" height="18" />
               <h1>Hacker News</h1>
             </a>
           )}

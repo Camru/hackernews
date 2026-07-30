@@ -10,7 +10,7 @@
   --color-gray-300: #d6d2c4;
   --color-white: #ffffff;
 
-  --color-comments: #9ba6b1;
+  --color-comments: var(--color-sky);
 
   --font-serif: Georgia, 'Times New Roman', serif;
   --font-sans:
@@ -19,7 +19,7 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --text-display: 2rem;
-  --text-heading: 1.25rem;
+  --text-heading: 1.2rem;
   --text-body: 0.9375rem;
   --text-mono: 0.8125rem;
 
@@ -67,6 +67,7 @@ code {
   gap: var(--space-2);
   background: var(--color-oat);
   padding: var(--space-2);
+  padding-left: 12px;
 }
 
 .header--sticky {
@@ -83,8 +84,14 @@ code {
 }
 
 .header-title {
-  display: inline-block;
   -webkit-tap-highlight-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.header-logo {
+  display: block;
 }
 
 .header h1 {
@@ -119,7 +126,7 @@ code {
 
 .story-item {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   gap: 10px;
   padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--color-gray-300);
@@ -138,9 +145,10 @@ code {
 .story-rank {
   flex-shrink: 0;
   min-width: 0.5em;
-  font-size: 1rem;
+  font-size: 12px;
   color: var(--color-gray-500);
   text-align: right;
+  margin-top: 4px;
 }
 
 .story-content {
@@ -206,12 +214,19 @@ code {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--color-gray-500);
 }
 
 .story-time--recent {
-  color: #019c01; 
+  color: #019c01;
+  font-weight: 500;
+}
+
+.story-stats {
+  display: flex;
+  margin-left: auto;
+  font-size: 13px;
 }
 
 .story-points {
@@ -219,16 +234,15 @@ code {
   align-items: center;
   gap: 3px;
   background-color: var(--color-white);
-  padding: 2px 5px;
   border-radius: 10px;
   color: var(--color-olive);
 }
 
-.story-points--hot {
+/* .story-points--hot {
   color: var(--color-olive);
   border: 1px solid;
   border-color: var(--color-olive);
-}
+} */
 
 .story-comments {
   display: inline-flex;
@@ -241,11 +255,11 @@ code {
   margin-left: auto;
 }
 
-.story-comments--hot {
+/* .story-comments--hot {
   color: var(--color-comments);
   border: 1px solid;
   border-color: var(--color-comments);
-}
+} */
 
 .header-actions {
   display: flex;
