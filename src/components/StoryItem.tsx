@@ -39,7 +39,7 @@ export function StoryItem({id, rank}: StoryItemProps) {
   const commentsUrl = `https://news.ycombinator.com/item?id=${storyId}`;
   const isHot = story.score > 300;
   const isPopular = (story.descendants ?? 0) > 200;
-  const isRecent = Date.now() / 1000 - story.time <= 3 * 3600;
+  const isRecent = Date.now() / 1000 - story.time < 2 * 3600;
 
   function openComments() {
     window.location.hash = `story/${storyId}`;
@@ -79,7 +79,7 @@ export function StoryItem({id, rank}: StoryItemProps) {
           {hostname && (
             <>
               {' '}
-              <span className="story-host">({hostname})</span>
+              <span className="story-host">{hostname}</span>
             </>
           )}
         </div>
