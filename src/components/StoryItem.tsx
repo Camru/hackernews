@@ -67,15 +67,22 @@ export function StoryItem({id, rank}: StoryItemProps) {
       tabIndex={0}>
       <span className="story-rank">{rank}</span>
       <div className="story-content">
-        <a
-          className="story-title"
-          href={story.url ?? commentsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={stopPropagation}>
-          {story.title}
-        </a>
-        {hostname && <span className="story-host">({hostname})</span>}
+        <div className="story-header">
+          <a
+            className="story-title"
+            href={story.url ?? commentsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={stopPropagation}>
+            {story.title}
+          </a>
+          {hostname && (
+            <>
+              {' '}
+              <span className="story-host">({hostname})</span>
+            </>
+          )}
+        </div>
         <div className="story-meta">
           <span>by {story.by}</span>
           <span className={isRecent ? 'story-time--recent' : undefined}>
