@@ -445,8 +445,11 @@ code {
 }
 
 .comment-search-result em {
-  background: yellow; 
   font-style: normal;
+  background-color: yellow;
+  border: 1px solid var(--color-slate);
+  border-radius: 4px;
+  padding: 0px 2px;
 }
 
 .comment-search-result-link {
