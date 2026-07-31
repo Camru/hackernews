@@ -30,17 +30,46 @@ function App() {
     setSearchQuery('');
   }, [storyId]);
 
+  // The header is sticky and its rendered height varies by breakpoint, so
+  // every scroll-to-target here subtracts it from the target's offset to
+  // keep the target fully visible below the header rather than tucked under
+  // it (scrollIntoView's default alignment doesn't account for this).
+  function getHeaderHeight() {
+    return document.querySelector('.header')?.getBoundingClientRect().height ?? 0;
+  }
+
   function scrollToTopOfComments() {
     const target = document.getElementById('story-detail-header');
     if (!target) {
       return;
     }
-    // The header is sticky, so scrollIntoView's default alignment leaves the
-    // top of the target tucked underneath it. Measuring the header's actual
-    // rendered height (it varies by breakpoint) and subtracting that from the
-    // scroll offset keeps the title fully visible below the sticky header.
-    const headerHeight = document.querySelector('.header')?.getBoundingClientRect().height ?? 0;
+    const headerHeight = getHeaderHeight();
     const targetTop = target.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({top: targetTop - headerHeight, behavior: 'smooth'});
+  }
+
+  function scrollToNextComment() {
+    // Only top-level replies to the story are direct children of
+    // #comment-list — nested replies live in their own .comment-children
+    // <ul>, so this selector already excludes them without extra bookkeeping.
+    const topLevelComments = Array.from(
+      document.querySelectorAll<HTMLElement>('#comment-list > li.comment'),
+    );
+    if (topLevelComments.length === 0) {
+      return;
+    }
+    const headerHeight = getHeaderHeight();
+    // A comment already sitting just below the sticky header shouldn't count
+    // as its own "next" target, hence the +1px buffer past the header edge.
+    const currentBottom = window.scrollY + headerHeight + 1;
+    const nextComment = topLevelComments.find((element) => {
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      return top > currentBottom;
+    });
+    if (!nextComment) {
+      return;
+    }
+    const targetTop = nextComment.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({top: targetTop - headerHeight, behavior: 'smooth'});
   }
 
@@ -66,6 +95,12 @@ function App() {
                 className="back-button"
                 onClick={scrollToTopOfComments}>
                 ↑ Top
+              </button>
+              <button
+                type="button"
+                className="back-button"
+                onClick={scrollToNextComment}>
+                ↓ Next
               </button>
             </div>
           ) : (
