@@ -2,6 +2,8 @@ import type { Comment, Story } from '../types'
 
 const BASE_URL = 'https://hacker-news.firebaseio.com/v0'
 
+export type Feed = 'top' | 'best' | 'ask'
+
 async function fetchItem<T>(id: number): Promise<T> {
   const response = await fetch(`${BASE_URL}/item/${id}.json`)
   if (!response.ok) {
@@ -10,10 +12,10 @@ async function fetchItem<T>(id: number): Promise<T> {
   return response.json()
 }
 
-export async function fetchTopStoryIds(): Promise<number[]> {
-  const response = await fetch(`${BASE_URL}/topstories.json`)
+export async function fetchStoryIds(feed: Feed): Promise<number[]> {
+  const response = await fetch(`${BASE_URL}/${feed}stories.json`)
   if (!response.ok) {
-    throw new Error(`Failed to fetch top stories: ${response.status}`)
+    throw new Error(`Failed to fetch ${feed} stories: ${response.status}`)
   }
   return response.json()
 }

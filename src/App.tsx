@@ -1,21 +1,26 @@
 import {useEffect, useState} from 'react';
 import y18 from './assets/y18.svg';
+import type {Feed} from './api/hackerNews';
 import {StoryDetail} from './components/StoryDetail';
 import {StoryList} from './components/StoryList';
+import {SearchResults} from './components/SearchResults';
+import {FeedTabs} from './components/FeedTabs';
 import {useHashRoute} from './hooks/useHashRoute';
-import {useTopStoryIds} from './hooks/useTopStoryIds';
+import {useStoryIds} from './hooks/useStoryIds';
 
-const TOP_STORIES_LIMIT = 30;
+const STORIES_LIMIT = 30;
 
 function App() {
+  const [activeFeed, setActiveFeed] = useState<Feed>('top');
   const {
     data: storyIds = [],
     isPending,
     isError,
-  } = useTopStoryIds(TOP_STORIES_LIMIT);
+  } = useStoryIds(activeFeed, STORIES_LIMIT);
   const {storyId, closeStory} = useHashRoute();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const isSearching = searchQuery.trim().length > 0;
 
   // Story-title search and comment search are different contexts, so clear
   // out any in-progress search whenever navigating between the list and a
@@ -78,7 +83,7 @@ function App() {
                 className="search-input"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder={storyId ? 'Search comments' : 'Search titles'}
+                placeholder={storyId ? 'Search this thread' : 'Search all stories'}
                 autoFocus
               />
               <button
@@ -112,9 +117,14 @@ function App() {
           )}
         </div>
       </header>
+      {!storyId && !isSearching && (
+        <FeedTabs activeFeed={activeFeed} onSelect={setActiveFeed} />
+      )}
       <main>
         {storyId ? (
           <StoryDetail id={storyId} searchQuery={searchQuery} />
+        ) : isSearching ? (
+          <SearchResults query={searchQuery} />
         ) : (
           <>
             {isPending && <p className="status">Loading stories…</p>}
@@ -123,9 +133,7 @@ function App() {
                 Failed to load stories. Please try again.
               </p>
             )}
-            {!isPending && !isError && (
-              <StoryList storyIds={storyIds} searchQuery={searchQuery} />
-            )}
+            {!isPending && !isError && <StoryList storyIds={storyIds} />}
           </>
         )}
       </main>

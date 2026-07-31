@@ -2,7 +2,6 @@ import {useState, type KeyboardEvent, type MouseEvent} from 'react';
 import {useComment} from '../hooks/useComment';
 import {formatTimeAgo} from '../utils/time';
 import {sanitizeCommentHtml} from '../utils/sanitizeHtml';
-import {stripHtmlTags} from '../utils/text';
 
 // Replies past this depth start collapsed so opening a large thread doesn't
 // fan out into hundreds of simultaneous item fetches.
@@ -11,24 +10,13 @@ const AUTO_EXPAND_DEPTH = 2;
 interface CommentItemProps {
   id: number;
   depth?: number;
-  searchQuery?: string;
 }
 
-export function CommentItem({
-  id,
-  depth = 0,
-  searchQuery = '',
-}: CommentItemProps) {
+export function CommentItem({id, depth = 0}: CommentItemProps) {
   const {data: comment, isPending} = useComment(id);
   const [repliesExpanded, setRepliesExpanded] = useState(
     depth < AUTO_EXPAND_DEPTH,
   );
-
-  const normalizedQuery = searchQuery.trim().toLowerCase();
-  // A search should surface matches buried in collapsed replies, so while
-  // one is active every thread force-expands instead of respecting the
-  // per-comment collapse state (and manual collapsing is disabled).
-  const isSearching = normalizedQuery.length > 0;
 
   if (isPending) {
     return (
@@ -44,12 +32,7 @@ export function CommentItem({
 
   const isRemoved = comment.deleted || comment.dead || !comment.text;
   const kids = comment.kids ?? [];
-  const isCollapsible = kids.length > 0 && !isSearching;
-  const isExpanded = isSearching || repliesExpanded;
-  const isMatch =
-    isSearching &&
-    !isRemoved &&
-    stripHtmlTags(comment.text!).toLowerCase().includes(normalizedQuery);
+  const isCollapsible = kids.length > 0;
 
   // Nested replies are actual descendant <li>s, so a click on a child comment
   // would otherwise bubble up and toggle every ancestor comment too. Stopping
@@ -68,7 +51,7 @@ export function CommentItem({
 
   return (
     <li
-      className={`comment${isCollapsible ? ' comment--collapsible' : ''}${isMatch ? ' comment--match' : ''}`}
+      className={`comment${isCollapsible ? ' comment--collapsible' : ''}`}
       onClick={handleToggle}
       onKeyDown={isCollapsible ? handleKeyDown : undefined}
       role={isCollapsible ? 'button' : undefined}
@@ -97,15 +80,10 @@ export function CommentItem({
           )}
         </>
       )}
-      {kids.length > 0 && isExpanded && (
+      {kids.length > 0 && repliesExpanded && (
         <ul className="comment-children">
           {kids.map((kidId) => (
-            <CommentItem
-              key={kidId}
-              id={kidId}
-              depth={depth + 1}
-              searchQuery={searchQuery}
-            />
+            <CommentItem key={kidId} id={kidId} depth={depth + 1} />
           ))}
         </ul>
       )}

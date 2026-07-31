@@ -2,16 +2,25 @@ import type {KeyboardEvent, MouseEvent} from 'react';
 import {useStory} from '../hooks/useStory';
 import {formatTimeAgo} from '../utils/time';
 import {getHostname} from '../utils/url';
+import type {Story} from '../types';
 
 interface StoryItemProps {
   id: number;
   rank: number;
+  // Search results already come back from Algolia as full Story objects, so
+  // passing one in skips the redundant per-id Firebase fetch below.
+  story?: Story;
 }
 
-export function StoryItem({id, rank}: StoryItemProps) {
-  const {data: story, isPending, isError} = useStory(id);
+export function StoryItem({id, rank, story: providedStory}: StoryItemProps) {
+  const {data: fetchedStory, isPending, isError} = useStory(id, {
+    enabled: !providedStory,
+  });
+  const story = providedStory ?? fetchedStory;
 
-  if (isPending) {
+  // A disabled query stays in `pending` status forever, so `isPending` alone
+  // can't be used to gate the skeleton once a story is already provided.
+  if (!story && isPending) {
     return (
       <li className="story-item">
         <span className="story-rank">{rank}</span>
