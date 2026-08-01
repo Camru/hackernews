@@ -96,12 +96,6 @@ function App() {
                 onClick={scrollToTopOfComments}>
                 ↑ Top
               </button>
-              <button
-                type="button"
-                className="back-button"
-                onClick={scrollToNextComment}>
-                ↓ Next
-              </button>
             </div>
           ) : (
             <a className="header-title" href="/">
@@ -172,6 +166,15 @@ function App() {
           </>
         )}
       </main>
+      {storyId && (
+        <button
+          type="button"
+          className="next-comment-button"
+          onClick={scrollToNextComment}
+          aria-label="Next comment">
+          ↓ Next
+        </button>
+      )}
     </div>
   );
 }
