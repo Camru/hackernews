@@ -10,7 +10,7 @@
   --color-gray-300: #d6d2c4;
   --color-white: #ffffff;
 
-  --color-comments: var(--color-sky);
+  --color-comments: #80aad6;
 
   --font-serif: Georgia, 'Times New Roman', serif;
   --font-sans:
@@ -214,14 +214,24 @@ code {
 }
 
 .skeleton-title {
-  width: 70%;
+  width: 90%;
   height: 1.05rem;
-  margin-bottom: var(--space-2);
+}
+
+.skeleton-host {
+  width: 30%;
+  height: 0.85rem;
 }
 
 .skeleton-meta {
   width: 45%;
   height: 0.8rem;
+}
+
+.skeleton-stat {
+  width: 36px;
+  height: 19px;
+  border-radius: 10px;
 }
 
 @keyframes skeleton-pulse {
@@ -354,6 +364,14 @@ code {
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 2;
+
+  bottom: 0px;
+  right: 0px;
+  padding: 30px;
+  border-radius: 21px 0 0;
+  border-bottom: 0;
+  border-right: 0;
+  border: 0;
 }
 
 .header-search {

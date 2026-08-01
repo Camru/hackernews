@@ -13,7 +13,11 @@ interface StoryItemProps {
 }
 
 export function StoryItem({id, rank, story: providedStory}: StoryItemProps) {
-  const {data: fetchedStory, isPending, isError} = useStory(id, {
+  const {
+    data: fetchedStory,
+    isPending,
+    isError,
+  } = useStory(id, {
     enabled: !providedStory,
   });
   const story = providedStory ?? fetchedStory;
@@ -25,8 +29,11 @@ export function StoryItem({id, rank, story: providedStory}: StoryItemProps) {
       <li className="story-item">
         <span className="story-rank">{rank}</span>
         <div className="story-content">
-          <div className="skeleton skeleton-title" />
-          <div className="skeleton skeleton-meta" />
+          <div className="story-main">
+            <div className="skeleton skeleton-title" />
+            <div className="skeleton skeleton-host" />
+            <div className="skeleton skeleton-meta" />
+          </div>
         </div>
       </li>
     );
