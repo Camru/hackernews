@@ -340,8 +340,8 @@ code {
 
 .next-comment-button {
   position: fixed;
-  right: var(--space-4);
-  bottom: var(--space-2);
+  right: var(--space-5);
+  bottom: var(--space-6);
   display: inline-flex;
   align-items: center;
   padding: var(--space-2) var(--space-4);
