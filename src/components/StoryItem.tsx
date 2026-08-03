@@ -1,5 +1,6 @@
 import type {KeyboardEvent, MouseEvent} from 'react';
 import {useStory} from '../hooks/useStory';
+import {useSavedStories} from '../hooks/useSavedStories';
 import {formatTimeAgo} from '../utils/time';
 import {getHostname} from '../utils/url';
 import type {Story} from '../types';
@@ -27,13 +28,30 @@ export function StoryItem({
     enabled: !providedStory,
   });
   const story = providedStory ?? fetchedStory;
+  const {savedIds, save, remove} = useSavedStories();
+  const isSaved = savedIds.includes(id);
+
+  function toggleSaved(event: MouseEvent) {
+    event.stopPropagation();
+    if (isSaved) {
+      remove(id);
+    } else {
+      save(id);
+    }
+  }
 
   // A disabled query stays in `pending` status forever, so `isPending` alone
   // can't be used to gate the skeleton once a story is already provided.
   if (!story && isPending) {
     return (
       <li className="story-item">
-        <span className="story-rank">{rank}</span>
+        <button
+          type="button"
+          className={`story-rank${isSaved ? ' story-rank--saved' : ''}`}
+          onClick={toggleSaved}
+          aria-label={isSaved ? 'Unsave story' : 'Save story'}>
+          {rank}
+        </button>
         <div className="story-content">
           <div className="story-main">
             <div className="skeleton skeleton-title" />
@@ -48,7 +66,13 @@ export function StoryItem({
   if (isError || !story) {
     return (
       <li className="story-item">
-        <span className="story-rank">{rank}</span>
+        <button
+          type="button"
+          className={`story-rank${isSaved ? ' story-rank--saved' : ''}`}
+          onClick={toggleSaved}
+          aria-label={isSaved ? 'Unsave story' : 'Save story'}>
+          {rank}
+        </button>
         <div className="story-content">
           <p className="status-error">Failed to load this story.</p>
           {onRemove && <UnsaveButton onRemove={onRemove} />}
@@ -88,7 +112,13 @@ export function StoryItem({
       onKeyDown={handleKeyDown}
       role="link"
       tabIndex={0}>
-      <span className="story-rank">{rank}</span>
+      <button
+        type="button"
+        className={`story-rank${isSaved ? ' story-rank--saved' : ''}`}
+        onClick={toggleSaved}
+        aria-label={isSaved ? 'Unsave story' : 'Save story'}>
+        {rank}
+      </button>
       <div className="story-content">
         <div className="story-main">
           <div className="story-header">
