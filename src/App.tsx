@@ -35,7 +35,9 @@ function App() {
   // keep the target fully visible below the header rather than tucked under
   // it (scrollIntoView's default alignment doesn't account for this).
   function getHeaderHeight() {
-    return document.querySelector('.header')?.getBoundingClientRect().height ?? 0;
+    return (
+      document.querySelector('.header')?.getBoundingClientRect().height ?? 0
+    );
   }
 
   function scrollToTopOfComments() {
@@ -99,7 +101,13 @@ function App() {
             </div>
           ) : (
             <a className="header-title" href="/">
-              <img className="header-logo" src={y18} alt="" width="18" height="18" />
+              <img
+                className="header-logo"
+                src={y18}
+                alt=""
+                width="18"
+                height="18"
+              />
               <h1>Hacker News</h1>
             </a>
           )}
@@ -112,7 +120,9 @@ function App() {
                 className="search-input"
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder={storyId ? 'Search this thread' : 'Search all stories'}
+                placeholder={
+                  storyId ? 'Search this thread' : 'Search all stories'
+                }
                 autoFocus
               />
               <button
@@ -171,9 +181,8 @@ function App() {
           type="button"
           className="next-comment-button"
           onClick={scrollToNextComment}
-          aria-label="Next comment">
-          ↓ Next
-        </button>
+          aria-label="Next comment"
+        />
       )}
     </div>
   );
