@@ -198,8 +198,15 @@ code {
 }
 
 .story-rank--saved {
-  font-weight: 900;
-  color: var(--color-olive);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--color-olive);
+  color: var(--color-white);
+  font-weight: 700;
 }
 
 .story-content {
