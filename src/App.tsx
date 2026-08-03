@@ -128,7 +128,10 @@ function App() {
                   width="16"
                   height="16"
                   viewBox="0 0 24 24"
-                  fill="currentColor"
+                  fill={isCurrentStorySaved ? 'currentColor' : 'none'}
+                  stroke="currentColor"
+                  strokeWidth={isCurrentStorySaved ? 0 : 2}
+                  strokeLinejoin="round"
                   aria-hidden="true">
                   <path d="M6 2h12v20l-6-4-6 4z" />
                 </svg>
