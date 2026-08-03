@@ -4,23 +4,44 @@ import type {Feed} from './api/hackerNews';
 import {StoryDetail} from './components/StoryDetail';
 import {StoryList} from './components/StoryList';
 import {SearchResults} from './components/SearchResults';
+import {SavedStories} from './components/SavedStories';
 import {FeedTabs} from './components/FeedTabs';
 import {useHashRoute} from './hooks/useHashRoute';
 import {useStoryIds} from './hooks/useStoryIds';
+import {useSavedStories} from './hooks/useSavedStories';
 
 const STORIES_LIMIT = 30;
 
 function App() {
   const [activeFeed, setActiveFeed] = useState<Feed>('top');
+  const [isViewingSaved, setIsViewingSaved] = useState(false);
   const {
     data: storyIds = [],
     isPending,
     isError,
   } = useStoryIds(activeFeed, STORIES_LIMIT);
   const {storyId, closeStory} = useHashRoute();
+  const {savedIds, save: saveStory, remove: removeSavedStory} = useSavedStories();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const isSearching = searchQuery.trim().length > 0;
+  const isCurrentStorySaved = storyId !== null && savedIds.includes(storyId);
+
+  function selectFeed(feed: Feed) {
+    setActiveFeed(feed);
+    setIsViewingSaved(false);
+  }
+
+  function toggleSavedStory() {
+    if (storyId === null) {
+      return;
+    }
+    if (isCurrentStorySaved) {
+      removeSavedStory(storyId);
+    } else {
+      saveStory(storyId);
+    }
+  }
 
   // Story-title search and comment search are different contexts, so clear
   // out any in-progress search whenever navigating between the list and a
@@ -98,6 +119,20 @@ function App() {
                 onClick={scrollToTopOfComments}>
                 ↑ Top
               </button>
+              <button
+                type="button"
+                className={`back-button save-button${isCurrentStorySaved ? ' save-button--active' : ''}`}
+                onClick={toggleSavedStory}
+                aria-label={isCurrentStorySaved ? 'Unsave story' : 'Save story'}>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true">
+                  <path d="M6 2h12v20l-6-4-6 4z" />
+                </svg>
+              </button>
             </div>
           ) : (
             <a className="header-title" href="/">
@@ -157,13 +192,20 @@ function App() {
         </div>
       </header>
       {!storyId && !isSearching && (
-        <FeedTabs activeFeed={activeFeed} onSelect={setActiveFeed} />
+        <FeedTabs
+          activeFeed={activeFeed}
+          onSelect={selectFeed}
+          isSavedActive={isViewingSaved}
+          onSelectSaved={() => setIsViewingSaved(true)}
+        />
       )}
       <main>
         {storyId ? (
           <StoryDetail id={storyId} searchQuery={searchQuery} />
         ) : isSearching ? (
           <SearchResults query={searchQuery} />
+        ) : isViewingSaved ? (
+          <SavedStories />
         ) : (
           <>
             {isPending && <p className="status">Loading stories…</p>}
