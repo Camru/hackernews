@@ -21,7 +21,8 @@ export function CommentItem({id, depth = 0}: CommentItemProps) {
   if (isPending) {
     return (
       <li className="comment">
-        <p className="comment-placeholder">Loading…</p>
+        <div className="skeleton skeleton-comment-meta" />
+        <div className="skeleton skeleton-comment-line" />
       </li>
     );
   }
