@@ -51,6 +51,37 @@ function App() {
     setSearchQuery('');
   }, [storyId]);
 
+  // The saved tab disappears once nothing is saved, so fall back to the feed
+  // view rather than leaving the user stranded on a tab that no longer shows.
+  useEffect(() => {
+    if (savedIds.length === 0) {
+      setIsViewingSaved(false);
+    }
+  }, [savedIds.length]);
+
+  // Opening a story should always start scrolled to its header, the same as
+  // clicking "Top" — otherwise it inherits whatever scroll position the list
+  // was left at. The header renders asynchronously once the story finishes
+  // loading, so this watches the DOM for it instead of assuming it's already
+  // there.
+  useEffect(() => {
+    if (storyId === null) {
+      return;
+    }
+    if (document.getElementById('story-detail-header')) {
+      scrollToTopOfComments();
+      return;
+    }
+    const observer = new MutationObserver(() => {
+      if (document.getElementById('story-detail-header')) {
+        scrollToTopOfComments();
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.body, {childList: true, subtree: true});
+    return () => observer.disconnect();
+  }, [storyId]);
+
   // The header is sticky and its rendered height varies by breakpoint, so
   // every scroll-to-target here subtracts it from the target's offset to
   // keep the target fully visible below the header rather than tucked under
@@ -200,6 +231,7 @@ function App() {
           onSelect={selectFeed}
           isSavedActive={isViewingSaved}
           onSelectSaved={() => setIsViewingSaved(true)}
+          hasSavedStories={savedIds.length > 0}
         />
       )}
       <main>

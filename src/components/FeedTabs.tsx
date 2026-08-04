@@ -11,6 +11,7 @@ interface FeedTabsProps {
   onSelect: (feed: Feed) => void;
   isSavedActive: boolean;
   onSelectSaved: () => void;
+  hasSavedStories: boolean;
 }
 
 export function FeedTabs({
@@ -18,6 +19,7 @@ export function FeedTabs({
   onSelect,
   isSavedActive,
   onSelectSaved,
+  hasSavedStories,
 }: FeedTabsProps) {
   return (
     <nav className="feed-tabs" aria-label="Story feeds">
@@ -31,16 +33,18 @@ export function FeedTabs({
           {feed.label}
         </button>
       ))}
-      <button
-        type="button"
-        className={`feed-tab feed-tab--saved${isSavedActive ? ' feed-tab--active' : ''}`}
-        aria-current={isSavedActive ? 'true' : undefined}
-        aria-label="Saved stories"
-        onClick={onSelectSaved}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M6 2h12v20l-6-4-6 4z" />
-        </svg>
-      </button>
+      {hasSavedStories && (
+        <button
+          type="button"
+          className={`feed-tab feed-tab--saved${isSavedActive ? ' feed-tab--active' : ''}`}
+          aria-current={isSavedActive ? 'true' : undefined}
+          aria-label="Saved stories"
+          onClick={onSelectSaved}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M6 2h12v20l-6-4-6 4z" />
+          </svg>
+        </button>
+      )}
     </nav>
   );
 }
