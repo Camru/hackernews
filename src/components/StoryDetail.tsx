@@ -20,7 +20,9 @@ export function StoryDetail({id, searchQuery}: StoryDetailProps) {
     <div className="story-detail">
       {isPending && <p className="status">Loading story…</p>}
       {isError && (
-        <p className="status status-error">Failed to load this story. Please try again.</p>
+        <p className="status status-error">
+          Failed to load this story. Please try again.
+        </p>
       )}
       {story && (
         <>
@@ -29,8 +31,7 @@ export function StoryDetail({id, searchQuery}: StoryDetailProps) {
               className="story-title"
               href={story.url ?? commentsUrl}
               target="_blank"
-              rel="noopener noreferrer"
-            >
+              rel="noopener noreferrer">
               {story.title}
             </a>
             {hostname && <span className="story-host">({hostname})</span>}
@@ -48,7 +49,9 @@ export function StoryDetail({id, searchQuery}: StoryDetailProps) {
           ) : (
             <ul id="comment-list" className="comment-list">
               {story.kids && story.kids.length > 0 ? (
-                story.kids.map((kidId) => <CommentItem key={kidId} id={kidId} />)
+                story.kids.map((kidId) => (
+                  <CommentItem key={kidId} id={kidId} />
+                ))
               ) : (
                 <li className="status">No comments yet.</li>
               )}

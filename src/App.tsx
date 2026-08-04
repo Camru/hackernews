@@ -3,6 +3,7 @@ import y18 from './assets/y18.svg';
 import type {Feed} from './api/hackerNews';
 import {StoryDetail} from './components/StoryDetail';
 import {StoryList} from './components/StoryList';
+import {StoryItemSkeleton} from './components/StoryItemSkeleton';
 import {SearchResults} from './components/SearchResults';
 import {SavedStories} from './components/SavedStories';
 import {FeedTabs} from './components/FeedTabs';
@@ -243,7 +244,13 @@ function App() {
           <SavedStories />
         ) : (
           <>
-            {isPending && <p className="status">Loading stories…</p>}
+            {isPending && (
+              <ol className="story-list">
+                {Array.from({length: STORIES_LIMIT}, (_, index) => (
+                  <StoryItemSkeleton key={index} rank={index + 1} />
+                ))}
+              </ol>
+            )}
             {isError && (
               <p className="status status-error">
                 Failed to load stories. Please try again.
