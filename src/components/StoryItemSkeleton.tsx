@@ -8,7 +8,9 @@ interface StoryItemSkeletonProps {
 export function StoryItemSkeleton({rank}: StoryItemSkeletonProps) {
   return (
     <li className="story-item">
-      <span className="story-rank">{rank}</span>
+      <div className="story-rank">
+        <span className="story-rank-number">{rank}</span>
+      </div>
       <div className="story-content">
         <div className="story-main">
           <div className="skeleton skeleton-title" />

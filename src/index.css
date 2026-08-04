@@ -182,9 +182,7 @@ code {
 
 .story-item {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: var(--space-3) var(--space-4);
+  align-items: stretch;
   border-bottom: 1px solid var(--color-gray-300);
   -webkit-tap-highlight-color: transparent;
 }
@@ -198,22 +196,28 @@ code {
   outline-offset: -2px;
 }
 
+/* The whole left column (not just the number itself) is the save/unsave tap
+   target — bigger, easier to hit with a finger than the digits alone. */
 .story-rank {
+  display: flex;
   flex-shrink: 0;
-  min-width: 0.5em;
+  align-items: flex-start;
+  justify-content: center;
+  width: 40px;
+  padding-top: calc(var(--space-3) + 4px);
   border: none;
   background: none;
-  padding: 0;
   font-family: inherit;
-  font-size: 12px;
-  color: var(--color-gray-500);
-  text-align: right;
-  margin-top: 4px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
-.story-rank--saved {
+.story-rank-number {
+  font-size: 12px;
+  color: var(--color-gray-500);
+}
+
+.story-rank-number--saved {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -232,6 +236,7 @@ code {
   gap: var(--space-3);
   flex: 1;
   min-width: 0;
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
 }
 
 .story-main {
@@ -672,8 +677,13 @@ code {
     padding: var(--space-2) var(--space-6);
   }
 
-  .story-item {
-    padding: 14px var(--space-6);
+  .story-rank {
+    width: 48px;
+    padding-top: calc(14px + 4px);
+  }
+
+  .story-content {
+    padding: 14px var(--space-6) 14px 0;
   }
 
   .story-title {

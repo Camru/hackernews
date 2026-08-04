@@ -47,10 +47,13 @@ export function StoryItem({
       <li className="story-item">
         <button
           type="button"
-          className={`story-rank${isSaved ? ' story-rank--saved' : ''}`}
+          className="story-rank"
           onClick={toggleSaved}
           aria-label={isSaved ? 'Unsave story' : 'Save story'}>
-          {rank}
+          <span
+            className={`story-rank-number${isSaved ? ' story-rank-number--saved' : ''}`}>
+            {rank}
+          </span>
         </button>
         <div className="story-content">
           <div className="story-main">
@@ -68,10 +71,13 @@ export function StoryItem({
       <li className="story-item">
         <button
           type="button"
-          className={`story-rank${isSaved ? ' story-rank--saved' : ''}`}
+          className="story-rank"
           onClick={toggleSaved}
           aria-label={isSaved ? 'Unsave story' : 'Save story'}>
-          {rank}
+          <span
+            className={`story-rank-number${isSaved ? ' story-rank-number--saved' : ''}`}>
+            {rank}
+          </span>
         </button>
         <div className="story-content">
           <p className="status-error">Failed to load this story.</p>
@@ -114,10 +120,13 @@ export function StoryItem({
       tabIndex={0}>
       <button
         type="button"
-        className={`story-rank${isSaved ? ' story-rank--saved' : ''}`}
+        className="story-rank"
         onClick={toggleSaved}
         aria-label={isSaved ? 'Unsave story' : 'Save story'}>
-        {rank}
+        <span
+          className={`story-rank-number${isSaved ? ' story-rank-number--saved' : ''}`}>
+          {rank}
+        </span>
       </button>
       <div className="story-content">
         <div className="story-main">

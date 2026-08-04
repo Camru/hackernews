@@ -12,14 +12,6 @@ async function fetchItem<T>(id: number): Promise<T> {
   return response.json();
 }
 
-const delay = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve('');
-    }, 2000);
-  });
-};
-
 export async function fetchStoryIds(feed: Feed): Promise<number[]> {
   const response = await fetch(`${BASE_URL}/${feed}stories.json`);
   if (!response.ok) {
