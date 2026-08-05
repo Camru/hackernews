@@ -456,6 +456,7 @@ code {
   right: 0px;
   height: 40%;
   width: 40px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .header-search {
