@@ -6,21 +6,31 @@ import {StoryList} from './components/StoryList';
 import {StoryItemSkeleton} from './components/StoryItemSkeleton';
 import {SearchResults} from './components/SearchResults';
 import {SavedStories} from './components/SavedStories';
-import {FeedTabs} from './components/FeedTabs';
+import {OfflineStories} from './components/OfflineStories';
+import {FeedTabs, type Tab} from './components/FeedTabs';
 import {useHashRoute} from './hooks/useHashRoute';
 import {useStoryIds} from './hooks/useStoryIds';
 import {useSavedStories} from './hooks/useSavedStories';
+import {useOfflineSnapshot} from './hooks/useOfflineSnapshot';
 
 const STORIES_LIMIT = 30;
 
 function App() {
   const [activeFeed, setActiveFeed] = useState<Feed>('top');
-  const [isViewingSaved, setIsViewingSaved] = useState(false);
+  const {state: offlineState} = useOfflineSnapshot();
+  // Offline cold starts land on the Offline tab by default — any feed tab
+  // would otherwise be an infinite "loading" skeleton with no network to
+  // resolve it, while the offline snapshot has something to actually read.
+  const [activeTab, setActiveTab] = useState<Tab>(() =>
+    !navigator.onLine && offlineState.stories.length > 0 ? 'offline' : 'top',
+  );
   const {
     data: storyIds = [],
     isPending,
     isError,
+    fetchStatus,
   } = useStoryIds(activeFeed, STORIES_LIMIT);
+  const isFeedUnavailableOffline = isPending && fetchStatus === 'paused';
   const {storyId, closeStory} = useHashRoute();
   const {savedIds, save: saveStory, remove: removeSavedStory} = useSavedStories();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -28,9 +38,11 @@ function App() {
   const isSearching = searchQuery.trim().length > 0;
   const isCurrentStorySaved = storyId !== null && savedIds.includes(storyId);
 
-  function selectFeed(feed: Feed) {
-    setActiveFeed(feed);
-    setIsViewingSaved(false);
+  function selectTab(tab: Tab) {
+    setActiveTab(tab);
+    if (tab === 'top' || tab === 'best' || tab === 'ask') {
+      setActiveFeed(tab);
+    }
   }
 
   function toggleSavedStory() {
@@ -55,10 +67,10 @@ function App() {
   // The saved tab disappears once nothing is saved, so fall back to the feed
   // view rather than leaving the user stranded on a tab that no longer shows.
   useEffect(() => {
-    if (savedIds.length === 0) {
-      setIsViewingSaved(false);
+    if (activeTab === 'saved' && savedIds.length === 0) {
+      setActiveTab(activeFeed);
     }
-  }, [savedIds.length]);
+  }, [activeTab, savedIds.length, activeFeed]);
 
   // Opening a story should always start scrolled to its header, the same as
   // clicking "Top" — otherwise it inherits whatever scroll position the list
@@ -228,10 +240,8 @@ function App() {
       </header>
       {!storyId && !isSearching && (
         <FeedTabs
-          activeFeed={activeFeed}
-          onSelect={selectFeed}
-          isSavedActive={isViewingSaved}
-          onSelectSaved={() => setIsViewingSaved(true)}
+          activeTab={activeTab}
+          onSelect={selectTab}
           hasSavedStories={savedIds.length > 0}
         />
       )}
@@ -240,16 +250,25 @@ function App() {
           <StoryDetail id={storyId} searchQuery={searchQuery} />
         ) : isSearching ? (
           <SearchResults query={searchQuery} />
-        ) : isViewingSaved ? (
+        ) : activeTab === 'saved' ? (
           <SavedStories />
+        ) : activeTab === 'offline' ? (
+          <OfflineStories />
         ) : (
           <>
-            {isPending && (
+            {isPending && !isFeedUnavailableOffline && (
               <ol className="story-list">
                 {Array.from({length: STORIES_LIMIT}, (_, index) => (
                   <StoryItemSkeleton key={index} rank={index + 1} />
                 ))}
               </ol>
+            )}
+            {isFeedUnavailableOffline && (
+              <p className="status">
+                You're offline, so this feed isn't available. Check the
+                Offline tab for stories saved for reading without a
+                connection.
+              </p>
             )}
             {isError && (
               <p className="status status-error">

@@ -20,11 +20,7 @@ export function StoryItem({
   story: providedStory,
   onRemove,
 }: StoryItemProps) {
-  const {
-    data: fetchedStory,
-    isPending,
-    isError,
-  } = useStory(id, {
+  const {data: fetchedStory, isPending} = useStory(id, {
     enabled: !providedStory,
   });
   const story = providedStory ?? fetchedStory;
@@ -66,7 +62,10 @@ export function StoryItem({
     );
   }
 
-  if (isError || !story) {
+  // A failed background refetch (e.g. a real network error, not just an
+  // offline-paused one) shouldn't discard perfectly good cached/offline
+  // data — only fall through to the error state once there's nothing to show.
+  if (!story) {
     return (
       <li className="story-item">
         <button

@@ -10,16 +10,25 @@ interface StoryDetailProps {
 }
 
 export function StoryDetail({id, searchQuery}: StoryDetailProps) {
-  const {data: story, isPending, isError} = useStory(id);
+  const {data: story, isPending, isError, fetchStatus} = useStory(id);
   const isSearching = searchQuery.trim().length > 0;
+  // A paused fetch (offline, no network attempted) that never had data to
+  // begin with would otherwise show "Loading story…" forever — this id
+  // simply isn't in the offline snapshot.
+  const isUnavailableOffline = isPending && fetchStatus === 'paused';
 
   const hostname = story ? getHostname(story.url) : null;
   const commentsUrl = `https://news.ycombinator.com/item?id=${id}`;
 
   return (
     <div className="story-detail">
-      {isPending && <p className="status">Loading story…</p>}
-      {isError && (
+      {isPending && !isUnavailableOffline && (
+        <p className="status">Loading story…</p>
+      )}
+      {isUnavailableOffline && (
+        <p className="status">This story isn't available offline.</p>
+      )}
+      {isError && !story && (
         <p className="status status-error">
           Failed to load this story. Please try again.
         </p>
