@@ -17,8 +17,6 @@ export function StoryDetail({id, searchQuery}: StoryDetailProps) {
   // simply isn't in the offline snapshot.
   const isUnavailableOffline = isPending && fetchStatus === 'paused';
 
-  console.log('[cam] story', story);
-
   const hostname = story ? getHostname(story.url) : null;
   const commentsUrl = `https://news.ycombinator.com/item?id=${id}`;
 

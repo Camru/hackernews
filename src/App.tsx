@@ -18,12 +18,17 @@ const STORIES_LIMIT = 30;
 function App() {
   const [activeFeed, setActiveFeed] = useState<Feed>('top');
   const {state: offlineState} = useOfflineSnapshot();
-  // Offline cold starts land on the Offline tab by default — any feed tab
+  const {savedIds, save: saveStory, remove: removeSavedStory} = useSavedStories();
+  // Offline cold starts land on the Offline tab by default, or the Saved tab
+  // if there's no feed snapshot but stories have been saved — any feed tab
   // would otherwise be an infinite "loading" skeleton with no network to
-  // resolve it, while the offline snapshot has something to actually read.
-  const [activeTab, setActiveTab] = useState<Tab>(() =>
-    !navigator.onLine && offlineState.stories.length > 0 ? 'offline' : 'top',
-  );
+  // resolve it, while one of these has something to actually read.
+  const [activeTab, setActiveTab] = useState<Tab>(() => {
+    if (navigator.onLine) return 'top';
+    if (offlineState.stories.length > 0) return 'offline';
+    if (savedIds.length > 0) return 'saved';
+    return 'top';
+  });
   const {
     data: storyIds = [],
     isPending,
@@ -32,7 +37,6 @@ function App() {
   } = useStoryIds(activeFeed, STORIES_LIMIT);
   const isFeedUnavailableOffline = isPending && fetchStatus === 'paused';
   const {storyId, closeStory} = useHashRoute();
-  const {savedIds, save: saveStory, remove: removeSavedStory} = useSavedStories();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const isSearching = searchQuery.trim().length > 0;

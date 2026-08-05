@@ -30,6 +30,18 @@ function getSnapshot() {
   return ids;
 }
 
+// Plain (non-hook) accessors for modules outside React — e.g. the offline
+// sync store needs the current saved ids and change notifications without
+// depending on React itself. Returns the same reference as getSnapshot();
+// don't copy it, since callers may rely on that identity.
+export function getSavedIds(): number[] {
+  return getSnapshot();
+}
+
+export function subscribeSavedIds(listener: () => void): () => void {
+  return subscribe(listener);
+}
+
 // Backed by a module-level store rather than component state so every
 // consumer (the header save button, the feed tab, the saved-stories view)
 // stays in sync without threading state through props.
