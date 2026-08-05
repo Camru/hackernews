@@ -447,31 +447,18 @@ code {
 }
 
 .next-comment-button {
+  --button-width: 190px;
   position: fixed;
-  right: var(--space-5);
-  bottom: var(--space-6);
-  display: inline-flex;
-  align-items: center;
-  width: var(--space-7);
-  border: 1px solid var(--color-gray-500);
-  background-color: #ffffffeb;
-  border-radius: 999px;
-  color: var(--color-gray-500);
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 2;
-  bottom: 0px;
-  right: 0px;
-  padding: 30px;
-  border-radius: 21px 0 0;
-  border-bottom: 0;
-  border-right: 0;
-  border: 0;
-  width: 90px;
-  height: 85px;
   background-color: transparent;
+  border: none;
+  border-radius: 40%;
+  width: var(--button-width);
+  height: var(--button-width);
+  bottom: -90px;
+  right: -95px;
 }
 
 .header-search {
