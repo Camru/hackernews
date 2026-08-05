@@ -679,7 +679,7 @@ code {
 
 .comment-text a {
   text-decoration: underline;
-  color: var(--color-clay);
+  color: #1e94df;
 }
 
 .comment-text .comment-quote {

@@ -93,8 +93,14 @@ export async function syncOfflineSnapshot({
   );
   // Re-order to the original "top" ranking — mapLimitSettled resolves in
   // completion order, not request order, and this ranking is what the
-  // offline list's rank numbers should reflect.
-  const storyById = new Map(fetchedStories.map((story) => [story.id, story]));
+  // offline list's rank numbers should reflect. Firebase returns a literal
+  // `null` body (HTTP 200) for a purged item id rather than an error, so
+  // that has to be filtered out here rather than assumed away.
+  const storyById = new Map(
+    fetchedStories
+      .filter((story): story is Story => story != null)
+      .map((story) => [story.id, story]),
+  );
   const stories = storyIds
     .map((id) => storyById.get(id))
     .filter((story): story is Story => story !== undefined);
@@ -126,9 +132,12 @@ export async function syncOfflineSnapshot({
       );
       const idsToFetch = frontier.slice(0, budget);
 
-      const fetched = await mapLimitSettled(idsToFetch, CONCURRENCY, (id) =>
-        fetchComment(id, signal),
-      );
+      // Same `null`-for-purged-items caveat as the story fetch above.
+      const fetched = (
+        await mapLimitSettled(idsToFetch, CONCURRENCY, (id) =>
+          fetchComment(id, signal),
+        )
+      ).filter((comment): comment is Comment => comment != null);
       for (const comment of fetched) {
         comments.set(comment.id, comment);
       }
