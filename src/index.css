@@ -449,14 +449,13 @@ code {
 .next-comment-button {
   position: fixed;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 2;
   background-color: transparent;
   border: none;
-  top: 52px;
+  bottom: 0px;
   right: 0px;
-  height: 100%;
-  width: 30px;
+  height: 40%;
+  width: 40px;
 }
 
 .header-search {
