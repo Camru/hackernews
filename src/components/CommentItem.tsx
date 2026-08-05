@@ -5,7 +5,7 @@ import {sanitizeCommentHtml} from '../utils/sanitizeHtml';
 
 // Replies past this depth start collapsed so opening a large thread doesn't
 // fan out into hundreds of simultaneous item fetches.
-const AUTO_EXPAND_DEPTH = 2;
+const AUTO_EXPAND_DEPTH = 3;
 
 interface CommentItemProps {
   id: number;

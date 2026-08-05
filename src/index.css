@@ -637,6 +637,14 @@ code {
   color: var(--color-clay);
 }
 
+.comment-text .comment-quote {
+  padding-left: var(--space-3);
+  border-left: 4px solid #b8c2cd;
+  color: var(--color-gray-900);
+  /* font-style: italic; */
+  padding-left: 15px;
+}
+
 .comment-placeholder {
   margin: var(--space-1) 0;
   font-size: 0.9rem;
