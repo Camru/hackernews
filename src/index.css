@@ -447,18 +447,16 @@ code {
 }
 
 .next-comment-button {
-  --button-width: 190px;
   position: fixed;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 2;
   background-color: transparent;
   border: none;
-  border-radius: 40%;
-  width: var(--button-width);
-  height: var(--button-width);
-  bottom: -90px;
-  right: -95px;
+  top: 52px;
+  right: 0px;
+  height: 100%;
+  width: 30px;
 }
 
 .header-search {
@@ -639,10 +637,10 @@ code {
 
 .comment-text .comment-quote {
   padding-left: var(--space-3);
-  border-left: 4px solid #b8c2cd;
+  border-left: 3px solid #b8c2cd;
   color: var(--color-gray-900);
-  /* font-style: italic; */
-  padding-left: 15px;
+  padding-left: 10px;
+  border-radius: 4px 0px 0px 4px;
 }
 
 .comment-placeholder {
