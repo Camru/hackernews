@@ -501,7 +501,7 @@ code {
   border: none;
   bottom: 0px;
   right: 0px;
-  height: 40%;
+  height: calc(100% - 53px);
   width: 40px;
   -webkit-tap-highlight-color: transparent;
 }
