@@ -274,12 +274,20 @@ function App() {
         )}
       </main>
       {storyId && (
-        <button
-          type="button"
-          className="next-comment-button"
-          onClick={scrollToNextComment}
-          aria-label="Next comment"
-        />
+        <>
+          <button
+            type="button"
+            className="back-edge-button"
+            onClick={closeStory}
+            aria-label="Back"
+          />
+          <button
+            type="button"
+            className="next-comment-button"
+            onClick={scrollToNextComment}
+            aria-label="Next comment"
+          />
+        </>
       )}
     </div>
   );

@@ -488,17 +488,25 @@ code {
   background: var(--color-olive);
 }
 
-.next-comment-button {
+.next-comment-button,
+.back-edge-button {
   position: fixed;
   cursor: pointer;
   z-index: 2;
   background-color: transparent;
   border: none;
   bottom: 0px;
-  right: 0px;
   height: calc(100% - 53px);
-  width: 40px;
+  width: 50px;
   -webkit-tap-highlight-color: transparent;
+}
+
+.next-comment-button {
+  right: 0px;
+}
+
+.back-edge-button {
+  left: 0px;
 }
 
 .header-search {
