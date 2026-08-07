@@ -140,6 +140,32 @@ function App() {
     window.scrollTo({top: targetTop - headerHeight, behavior: 'smooth'});
   }
 
+  // Lets the down arrow jump through comments the same way the right-edge
+  // tap zone does, but only while viewing a story and not while the user is
+  // typing into the search field.
+  useEffect(() => {
+    if (storyId === null) {
+      return;
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      const target = event.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        scrollToNextComment();
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [storyId]);
+
   function closeSearch() {
     setIsSearchOpen(false);
     setSearchQuery('');
