@@ -12,6 +12,10 @@ interface StoryItemProps {
   // passing one in skips the redundant per-id Firebase fetch below.
   story?: Story;
   onRemove?: () => void;
+  // The byline is only useful for Ask HN threads, where the submitter is the
+  // one asking the question — everywhere else it's just noise next to the
+  // title link.
+  showAuthor?: boolean;
 }
 
 export function StoryItem({
@@ -19,6 +23,7 @@ export function StoryItem({
   rank,
   story: providedStory,
   onRemove,
+  showAuthor = false,
 }: StoryItemProps) {
   const {data: fetchedStory, isPending} = useStory(id, {
     enabled: !providedStory,
@@ -138,7 +143,7 @@ export function StoryItem({
             {story.title}
           </a>
           <div className="story-meta">
-            <span>by {story.by}</span>
+            {showAuthor && <span>by {story.by}</span>}
             {hostname && <span className="story-host">{hostname}</span>}
             <span className={isRecent ? 'story-time--recent' : undefined}>
               {formatTimeAgo(story.time)}

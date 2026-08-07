@@ -279,7 +279,9 @@ function App() {
                 Failed to load stories. Please try again.
               </p>
             )}
-            {!isPending && !isError && <StoryList storyIds={storyIds} />}
+            {!isPending && !isError && (
+              <StoryList storyIds={storyIds} feed={activeFeed} />
+            )}
           </>
         )}
       </main>
