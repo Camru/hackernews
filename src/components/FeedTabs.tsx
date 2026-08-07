@@ -54,7 +54,16 @@ export function FeedTabs({activeTab, onSelect}: FeedTabsProps) {
           aria-current={activeTab === 'saved' ? 'true' : undefined}
           aria-label="Saved stories"
           onClick={() => onSelect('saved')}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true">
             <path d="M6 2h12v20l-6-4-6 4z" />
           </svg>
         </button>
