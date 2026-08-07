@@ -42,7 +42,7 @@ export function StoryDetail({id, searchQuery}: StoryDetailProps) {
               target="_blank"
               rel="noopener noreferrer">
               {story.title}
-            </a>
+            </a>{' '}
             {hostname && <span className="story-host">({hostname})</span>}
             <div className="story-meta">
               <span>{story.score} points</span>
