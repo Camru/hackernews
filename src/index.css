@@ -8,8 +8,8 @@
   --color-gray-900: #4f4f4f;
   --color-gray-500: #8a8a83;
   --color-gray-300: #d6d2c4;
-  /* --color-white: #ffffff; */
-  --color-white: #fbfbf6;
+  --color-white: #faf9f6;
+  --color-quote: #83919e;
 
   --color-comments: #80aad6;
 
@@ -20,7 +20,7 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --text-display: 1.2rem;
-  --text-heading: 1.2rem;
+  --text-heading: 1.1rem;
   --text-body: 0.9375rem;
   --text-mono: 0.8125rem;
 
@@ -97,10 +97,10 @@ code {
 
 .header h1 {
   margin: 0;
-  font-family: var(--font-serif);
   font-weight: 700;
   font-size: var(--text-heading);
-  color: var(--color-clay);
+  color: var(--color-slate);
+  font-family: Verdana, Geneva, sans-serif;
 }
 
 .subtitle {
@@ -686,8 +686,8 @@ code {
 
 .comment-text .comment-quote {
   padding-left: var(--space-3);
-  border-left: 3px solid #b8c2cd;
-  color: var(--color-gray-900);
+  border-left: 3px solid var(--color-quote);
+  color: var(--color-quote);
   border-radius: 4px 0px 0px 4px;
   padding: 2px 10px;
   margin: 10px 0px;
@@ -709,12 +709,19 @@ code {
 
 @media (min-width: 768px) {
   .app {
-    /* max-width: 960px; */
-    max-width: 85%;
+    max-width: 800px;
+  }
+
+  .header {
+    padding: 0px 15px;
   }
 
   .header h1 {
-    font-size: var(--text-display);
+    font-size: 16px;
+  }
+
+  .back-button {
+    padding: var(--space-1) var(--space-2);
   }
 
   .feed-tabs {
