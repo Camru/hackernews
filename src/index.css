@@ -294,11 +294,6 @@ code {
   min-width: 0;
 }
 
-.story-header {
-  display: flex;
-  flex-direction: column;
-}
-
 .skeleton {
   border-radius: 4px;
   background: var(--color-gray-300);

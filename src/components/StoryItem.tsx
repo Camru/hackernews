@@ -129,24 +129,17 @@ export function StoryItem({
       </button>
       <div className="story-content">
         <div className="story-main">
-          <div className="story-header">
-            <a
-              className="story-title"
-              href={story.url ?? commentsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={stopPropagation}>
-              {story.title}
-            </a>
-            {hostname && (
-              <>
-                {' '}
-                <span className="story-host">{hostname}</span>
-              </>
-            )}
-          </div>
+          <a
+            className="story-title"
+            href={story.url ?? commentsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={stopPropagation}>
+            {story.title}
+          </a>
           <div className="story-meta">
             <span>by {story.by}</span>
+            {hostname && <span className="story-host">{hostname}</span>}
             <span className={isRecent ? 'story-time--recent' : undefined}>
               {formatTimeAgo(story.time)}
             </span>
