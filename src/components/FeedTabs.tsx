@@ -11,10 +11,9 @@ const FEEDS: {id: Feed; label: string}[] = [
 interface FeedTabsProps {
   activeTab: Tab;
   onSelect: (tab: Tab) => void;
-  hasSavedStories: boolean;
 }
 
-export function FeedTabs({activeTab, onSelect, hasSavedStories}: FeedTabsProps) {
+export function FeedTabs({activeTab, onSelect}: FeedTabsProps) {
   return (
     <nav className="feed-tabs" aria-label="Story feeds">
       {FEEDS.map((feed) => (
@@ -49,18 +48,16 @@ export function FeedTabs({activeTab, onSelect, hasSavedStories}: FeedTabsProps) 
             <path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 104 16.29" />
           </svg>
         </button>
-        {hasSavedStories && (
-          <button
-            type="button"
-            className={`feed-tab feed-tab--saved${activeTab === 'saved' ? ' feed-tab--active' : ''}`}
-            aria-current={activeTab === 'saved' ? 'true' : undefined}
-            aria-label="Saved stories"
-            onClick={() => onSelect('saved')}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M6 2h12v20l-6-4-6 4z" />
-            </svg>
-          </button>
-        )}
+        <button
+          type="button"
+          className={`feed-tab feed-tab--saved${activeTab === 'saved' ? ' feed-tab--active' : ''}`}
+          aria-current={activeTab === 'saved' ? 'true' : undefined}
+          aria-label="Saved stories"
+          onClick={() => onSelect('saved')}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M6 2h12v20l-6-4-6 4z" />
+          </svg>
+        </button>
       </div>
     </nav>
   );

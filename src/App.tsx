@@ -68,14 +68,6 @@ function App() {
     setSearchQuery('');
   }, [storyId]);
 
-  // The saved tab disappears once nothing is saved, so fall back to the feed
-  // view rather than leaving the user stranded on a tab that no longer shows.
-  useEffect(() => {
-    if (activeTab === 'saved' && savedIds.length === 0) {
-      setActiveTab(activeFeed);
-    }
-  }, [activeTab, savedIds.length, activeFeed]);
-
   // Opening a story should always start scrolled to its header, the same as
   // clicking "Top" — otherwise it inherits whatever scroll position the list
   // was left at. The header renders asynchronously once the story finishes
@@ -243,11 +235,7 @@ function App() {
         </div>
       </header>
       {!storyId && !isSearching && (
-        <FeedTabs
-          activeTab={activeTab}
-          onSelect={selectTab}
-          hasSavedStories={savedIds.length > 0}
-        />
+        <FeedTabs activeTab={activeTab} onSelect={selectTab} />
       )}
       <main>
         {storyId ? (
