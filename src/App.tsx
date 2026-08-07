@@ -18,7 +18,11 @@ const STORIES_LIMIT = 30;
 function App() {
   const [activeFeed, setActiveFeed] = useState<Feed>('top');
   const {state: offlineState} = useOfflineSnapshot();
-  const {savedIds, save: saveStory, remove: removeSavedStory} = useSavedStories();
+  const {
+    savedIds,
+    save: saveStory,
+    remove: removeSavedStory,
+  } = useSavedStories();
   // Offline cold starts land on the Offline tab by default, or the Saved tab
   // if there's no feed snapshot but stories have been saved — any feed tab
   // would otherwise be an infinite "loading" skeleton with no network to
@@ -163,7 +167,9 @@ function App() {
                 type="button"
                 className={`back-button save-button${isCurrentStorySaved ? ' save-button--active' : ''}`}
                 onClick={toggleSavedStory}
-                aria-label={isCurrentStorySaved ? 'Unsave story' : 'Save story'}>
+                aria-label={
+                  isCurrentStorySaved ? 'Unsave story' : 'Save story'
+                }>
                 <svg
                   width="16"
                   height="16"
@@ -257,9 +263,8 @@ function App() {
             )}
             {isFeedUnavailableOffline && (
               <p className="status">
-                You're offline, so this feed isn't available. Check the
-                Offline tab for stories saved for reading without a
-                connection.
+                You're offline, so this feed isn't available. Check the Offline
+                tab for stories saved for reading without a connection.
               </p>
             )}
             {isError && (
