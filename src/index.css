@@ -363,6 +363,8 @@ code {
   line-height: 1.4;
   color: var(--color-gray-900);
   word-break: break-word;
+  width: fit-content;
+  cursor: default;
 }
 
 .story-title:visited {
